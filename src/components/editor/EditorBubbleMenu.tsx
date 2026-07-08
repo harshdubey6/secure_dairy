@@ -11,8 +11,11 @@ type Props = {
 
 export function EditorBubbleMenu({ editor }: Props) {
   const [show, setShow] = useState(false);
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [urlValue, setUrlValue] = useState("");
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
+  const urlInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     function update() {
@@ -29,10 +32,9 @@ export function EditorBubbleMenu({ editor }: Props) {
       const end = view.coordsAtPos(to);
 
       const editorRect = view.dom.getBoundingClientRect();
-      const menuHeight = 40;
 
       setPosition({
-        top: start.top - editorRect.top - menuHeight - 8,
+        top: start.top - editorRect.top - 48,
         left: (start.left + end.left) / 2 - editorRect.left,
       });
 
@@ -40,7 +42,10 @@ export function EditorBubbleMenu({ editor }: Props) {
     }
 
     editor.on("selectionUpdate", update);
-    editor.on("blur", () => setShow(false));
+    editor.on("blur", () => {
+      setShow(false);
+      setShowUrlInput(false);
+    });
 
     return () => {
       editor.off("selectionUpdate", update);
@@ -53,7 +58,7 @@ export function EditorBubbleMenu({ editor }: Props) {
   return (
     <div
       ref={menuRef}
-      className="absolute z-50 flex items-center gap-1 bg-bg-elevated border border-border-light rounded-lg shadow-md px-2 py-1.5"
+      className="absolute z-50 flex items-center gap-0.5 bg-bg-elevated border border-border-light rounded-lg shadow-md px-1.5 py-1"
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
@@ -62,52 +67,97 @@ export function EditorBubbleMenu({ editor }: Props) {
     >
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
+        aria-label="Bold"
         className={cn(
-          "p-1 rounded transition-colors",
+          "flex items-center justify-center min-w-[36px] min-h-[36px] p-2 rounded transition-colors",
           editor.isActive("bold")
             ? "bg-accent/10 text-accent"
             : "text-text-secondary hover:text-text-primary"
         )}
       >
-        <Bold className="w-3.5 h-3.5" />
+        <Bold className="w-4 h-4" />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
+        aria-label="Italic"
         className={cn(
-          "p-1 rounded transition-colors",
+          "flex items-center justify-center min-w-[36px] min-h-[36px] p-2 rounded transition-colors",
           editor.isActive("italic")
             ? "bg-accent/10 text-accent"
             : "text-text-secondary hover:text-text-primary"
         )}
       >
-        <Italic className="w-3.5 h-3.5" />
+        <Italic className="w-4 h-4" />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleCode().run()}
+        aria-label="Code"
         className={cn(
-          "p-1 rounded transition-colors",
+          "flex items-center justify-center min-w-[36px] min-h-[36px] p-2 rounded transition-colors",
           editor.isActive("code")
             ? "bg-accent/10 text-accent"
             : "text-text-secondary hover:text-text-primary"
         )}
       >
-        <Code className="w-3.5 h-3.5" />
+        <Code className="w-4 h-4" />
       </button>
-      <div className="w-px h-4 bg-border-light mx-0.5" />
+      <div className="w-px h-5 bg-border-light mx-0.5" />
       <button
         onClick={() => {
-          const url = prompt("Enter URL:");
-          if (url) editor.chain().focus().setLink({ href: url }).run();
+          if (editor.isActive("link")) {
+            editor.chain().focus().unsetLink().run();
+          } else {
+            setShowUrlInput(true);
+            setTimeout(() => urlInputRef.current?.focus(), 0);
+          }
         }}
+        aria-label={editor.isActive("link") ? "Remove link" : "Add link"}
         className={cn(
-          "p-1 rounded transition-colors",
+          "flex items-center justify-center min-w-[36px] min-h-[36px] p-2 rounded transition-colors",
           editor.isActive("link")
             ? "bg-accent/10 text-accent"
             : "text-text-secondary hover:text-text-primary"
         )}
       >
-        <Link className="w-3.5 h-3.5" />
+        <Link className="w-4 h-4" />
       </button>
+
+      {showUrlInput && (
+        <div className="flex items-center gap-1 ml-1 border-l border-border-light pl-2">
+          <input
+            ref={urlInputRef}
+            type="url"
+            value={urlValue}
+            onChange={(e) => setUrlValue(e.target.value)}
+            placeholder="Paste URL..."
+            className="w-32 h-8 rounded border border-input bg-transparent px-2 text-sm text-text-primary outline-none"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && urlValue.trim()) {
+                editor.chain().focus().setLink({ href: urlValue.trim() }).run();
+                setShowUrlInput(false);
+                setUrlValue("");
+              }
+              if (e.key === "Escape") {
+                setShowUrlInput(false);
+                setUrlValue("");
+              }
+            }}
+          />
+          <button
+            onClick={() => {
+              if (urlValue.trim()) {
+                editor.chain().focus().setLink({ href: urlValue.trim() }).run();
+                setShowUrlInput(false);
+                setUrlValue("");
+              }
+            }}
+            className="px-2 py-1 text-xs font-sans text-white bg-accent rounded transition-colors disabled:opacity-50"
+            disabled={!urlValue.trim()}
+          >
+            Add
+          </button>
+        </div>
+      )}
     </div>
   );
 }

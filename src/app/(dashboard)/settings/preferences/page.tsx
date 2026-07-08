@@ -33,7 +33,7 @@ export default function PreferencesPage() {
       <div className="space-y-8">
         <section>
           <h2 className="font-serif text-lg text-text-primary mb-4">Theme</h2>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {themeOptions.map((opt) => (
               <button
                 key={opt.value}
@@ -79,7 +79,7 @@ export default function PreferencesPage() {
           <h2 className="font-serif text-lg text-text-primary mb-4">
             Writing Width
           </h2>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {widthOptions.map((opt) => (
               <button
                 key={opt.value}

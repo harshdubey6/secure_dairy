@@ -5,13 +5,15 @@ const config: CapacitorConfig = {
   appName: "Secure Journal",
   webDir: "dist",
   server: {
-    url: "http://192.168.1.102:3000",
+    url: "https://secure-dairy.vercel.app/",
     cleartext: true,
   },
   android: {
     buildOptions: {
-      keystorePath: undefined,
-      keystoreAlias: undefined,
+      keystorePath: "secure-journal.keystore",
+      keystoreAlias: "secure-journal",
+      keystorePassword: "journal123",
+      keystoreAliasPassword: "journal123",
     },
   },
 };

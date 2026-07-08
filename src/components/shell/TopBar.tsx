@@ -24,7 +24,7 @@ const themeIcons: Record<string, React.ReactNode> = {
 
 export function TopBar() {
   const { theme, setTheme } = useTheme();
-  const { toggleSidebar } = useUIStore();
+  const { setMobileNavOpen } = useUIStore();
   const router = useRouter();
   const supabase = createClient();
 
@@ -39,7 +39,7 @@ export function TopBar() {
         <Button
           variant="ghost"
           size="icon"
-          onClick={toggleSidebar}
+          onClick={() => setMobileNavOpen(true)}
           className="lg:hidden text-text-secondary"
         >
           <Menu className="w-5 h-5" />

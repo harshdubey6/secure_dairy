@@ -99,7 +99,7 @@ export default function TodosPage() {
           disabled={!newTitle.trim() || createMutation.isPending}
           className="bg-accent hover:bg-accent-hover text-white font-sans shrink-0"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-5 h-5" />
         </Button>
       </div>
 
@@ -134,7 +134,7 @@ export default function TodosPage() {
             </span>
             <button
               onClick={() => deleteMutation.mutate(todo.id)}
-              className="text-text-muted hover:text-red opacity-0 group-hover:opacity-100 transition-all"
+              className="text-text-muted hover:text-red opacity-60 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
             >
               <Trash2 className="w-4 h-4" />
             </button>

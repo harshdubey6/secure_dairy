@@ -87,7 +87,7 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-px bg-border-light rounded-lg overflow-hidden">
+      <div className="grid grid-cols-7 gap-px bg-border-light rounded-lg overflow-hidden" style={{ minWidth: 0 }}>
         {WEEKDAY_NAMES.map((day) => (
           <div
             key={day}
@@ -110,7 +110,7 @@ export default function CalendarPage() {
               key={i}
               href={`/journal`}
               className={cn(
-                "bg-bg-surface min-h-[80px] sm:min-h-[100px] p-2 flex flex-col items-center hover:bg-border-light/50 transition-colors group",
+                "bg-bg-surface min-h-[56px] sm:min-h-[80px] p-1 sm:p-2 flex flex-col items-center hover:bg-border-light/50 transition-colors group",
                 !isCurrentMonth && "opacity-40",
                 isToday(day) && "ring-1 ring-accent ring-inset"
               )}
