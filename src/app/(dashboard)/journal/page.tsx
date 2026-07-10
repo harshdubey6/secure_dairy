@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { createClient } from "@/lib/supabase/client";
@@ -50,6 +50,9 @@ export default function JournalPage() {
   const queryClient = useQueryClient();
   const { setWordCount, setIsDirty, wordCount } = useJournalStore();
 
+  const [editorContent, setEditorContent] = useState<Record<string, unknown>>({});
+  const [editorText, setEditorText] = useState("");
+
   const { data: entry, isLoading } = useQuery({
     queryKey: ["entries", "today"],
     queryFn: fetchTodayEntry,
@@ -64,13 +67,7 @@ export default function JournalPage() {
     },
   });
 
-  const autosaveData = useMemo(
-    () => ({
-      content: (entry?.content as Record<string, unknown>) || {},
-      contentText: entry?.contentText || "",
-    }),
-    [entry?.content, entry?.contentText]
-  );
+  const autosaveData = { content: editorContent, contentText: editorText };
 
   const handleSave = useCallback(
     async (data: { content: Record<string, unknown>; contentText: string }) => {
@@ -89,6 +86,8 @@ export default function JournalPage() {
     (json: Record<string, unknown>, text: string) => {
       setIsDirty(true);
       setWordCount(countWords(text));
+      setEditorContent(json);
+      setEditorText(text);
     },
     [setIsDirty, setWordCount]
   );
