@@ -325,6 +325,23 @@ export const sessions = pgTable("sessions", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// ─── Day Planner Blocks ────────────────────────────────────────
+
+export const plannerBlocks = pgTable("planner_blocks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull(),
+  title: text("title").notNull(),
+  blockType: text("block_type").notNull().default("custom"),
+  startTime: time("start_time"),
+  endTime: time("end_time"),
+  date: date("date").notNull(),
+  color: text("color"),
+  isCompleted: boolean("is_completed").notNull().default(false),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 // ─── Saved Searches ────────────────────────────────────────────
 
 export const savedSearches = pgTable("saved_searches", {

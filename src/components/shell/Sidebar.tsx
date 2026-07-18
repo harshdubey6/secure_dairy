@@ -20,6 +20,7 @@ import {
   Shield,
   LayoutDashboard,
   Clock,
+  CalendarClock,
 } from "lucide-react";
 
 const navItems = [
@@ -27,6 +28,7 @@ const navItems = [
   { href: "/journal", label: "Journal", icon: Book },
   { href: "/journal/history", label: "History", icon: Clock },
   { href: "/calendar", label: "Calendar", icon: Calendar },
+  { href: "/planner", label: "Planner", icon: CalendarClock },
 
   { href: "/todos", label: "Tasks", icon: CheckSquare },
   { href: "/vault", label: "Vault", icon: Shield },
