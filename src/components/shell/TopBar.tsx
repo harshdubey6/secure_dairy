@@ -154,7 +154,24 @@ export function TopBar() {
   }
 
   async function handleLogout() {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut({ scope: "local" });
+    } catch {
+      // network or server error — proceed to force-clear cookies
+    }
+
+    // Bypass: supabase-js only clears local cookies when the API call
+    // succeeds or returns 401/404/403.  Any other error (5xx, timeout,
+    // network failure) leaves the cookies intact, so the middleware
+    // re-authenticates the user on the next request.
+    document.cookie.split("; ").forEach((c) => {
+      const eq = c.indexOf("=");
+      const name = eq > -1 ? c.substring(0, eq) : c;
+      if (name.startsWith("sb-")) {
+        document.cookie = `${name}=; Path=/; Max-Age=0; SameSite=Lax`;
+      }
+    });
+
     queryClient.clear();
     window.location.href = "/login";
   }

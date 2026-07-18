@@ -25,9 +25,13 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const result = await supabase.auth.getUser();
+    user = result.data.user;
+  } catch {
+    // Network or Supabase error — treat as unauthenticated
+  }
 
   const isAuthRoute = ["/login", "/signup", "/forgot-password", "/verify-email"].some((p) =>
     request.nextUrl.pathname.startsWith(p)
