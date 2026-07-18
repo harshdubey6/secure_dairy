@@ -4,6 +4,7 @@ import { useTheme } from "@/lib/theme-provider";
 import { useUIStore } from "@/stores/ui-store";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { Menu, Sun, Moon, Search, X, Book, CheckSquare, ArrowRight, Command } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -64,6 +65,7 @@ export function TopBar() {
   const { theme, setTheme } = useTheme();
   const { setMobileNavOpen } = useUIStore();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const supabase = createClient();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -153,7 +155,8 @@ export function TopBar() {
 
   async function handleLogout() {
     await supabase.auth.signOut();
-    router.push("/login");
+    queryClient.clear();
+    window.location.href = "/login";
   }
 
   return (

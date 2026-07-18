@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +14,6 @@ import { toast } from "sonner";
 import { Eye, EyeOff, Sparkles } from "lucide-react";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isMagicLinkLoading, setIsMagicLinkLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -42,7 +40,7 @@ export default function LoginPage() {
       setIsLoading(false);
       return;
     }
-    router.push("/journal");
+    window.location.assign("/journal");
   }
 
   async function sendMagicLink() {
