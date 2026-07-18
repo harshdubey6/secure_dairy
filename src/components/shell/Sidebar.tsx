@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { useUIStore } from "@/stores/ui-store";
+import { motion } from "framer-motion";
 import {
   Book,
   Calendar,
-  Search,
   Star,
   Archive,
   Trash2,
@@ -17,18 +17,24 @@ import {
   ChevronLeft,
   User,
   CheckSquare,
+  Shield,
+  LayoutDashboard,
+  Clock,
 } from "lucide-react";
 
 const navItems = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/journal", label: "Journal", icon: Book },
+  { href: "/journal/history", label: "History", icon: Clock },
   { href: "/calendar", label: "Calendar", icon: Calendar },
-  { href: "/search", label: "Search", icon: Search },
+
+  { href: "/todos", label: "Tasks", icon: CheckSquare },
+  { href: "/vault", label: "Vault", icon: Shield },
   { href: "/favorites", label: "Favorites", icon: Star },
-  { href: "/todos", label: "Todos", icon: CheckSquare },
   { href: "/archive", label: "Archive", icon: Archive },
-  { href: "/trash", label: "Trash", icon: Trash2 },
   { href: "/tags", label: "Tags", icon: Tags },
   { href: "/stats", label: "Statistics", icon: BarChart3 },
+  { href: "/trash", label: "Trash", icon: Trash2 },
 ];
 
 export function Sidebar() {
@@ -38,7 +44,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-bg-surface border-r border-border-light transition-all duration-300 flex flex-col",
+        "fixed left-0 top-0 z-40 h-dvh bg-bg-surface border-r border-border-light transition-all duration-300 flex flex-col",
         sidebarOpen ? "w-64" : "w-16"
       )}
     >
@@ -66,24 +72,31 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 py-4 space-y-1 px-2">
-        {navItems.map((item) => {
+        {navItems.map((item, i) => {
           const Icon = item.icon;
           const isActive = pathname.startsWith(item.href);
 
           return (
-            <Link
+            <motion.div
               key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-sans transition-colors",
-                isActive
-                  ? "bg-border-light text-text-primary border-l-2 border-accent"
-                  : "text-text-secondary hover:text-text-primary hover:bg-border-light"
-              )}
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.03, duration: 0.2, ease: "easeOut" }}
             >
-              <Icon className="w-5 h-5 shrink-0" />
-              {sidebarOpen && <span>{item.label}</span>}
-            </Link>
+              <Link
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-sans transition-all duration-200",
+                  "hover:scale-[1.02] active:scale-[0.98]",
+                  isActive
+                    ? "bg-border-light text-text-primary border-l-2 border-accent"
+                    : "text-text-secondary hover:text-text-primary hover:bg-border-light"
+                )}
+              >
+                <Icon className="w-5 h-5 shrink-0" />
+                {sidebarOpen && <motion.span layout>{item.label}</motion.span>}
+              </Link>
+            </motion.div>
           );
         })}
       </nav>

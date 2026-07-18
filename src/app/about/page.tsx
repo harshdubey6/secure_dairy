@@ -3,7 +3,7 @@ import { APP_NAME } from "@/lib/constants";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-bg-page">
+    <div className="min-h-dvh bg-bg-page">
       <header className="flex items-center justify-between px-8 py-6 max-w-4xl mx-auto">
         <Link
           href="/"

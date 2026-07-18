@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
-import { todos } from "@/lib/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { tasks } from "@/lib/db/schema";
+import { eq, and, desc } from "drizzle-orm";
 
 export async function GET() {
   try {
@@ -14,13 +14,13 @@ export async function GET() {
 
     const result = await db
       .select()
-      .from(todos)
-      .where(eq(todos.userId, user.id))
-      .orderBy(desc(todos.createdAt));
+      .from(tasks)
+      .where(and(eq(tasks.userId, user.id), eq(tasks.isDeleted, false)))
+      .orderBy(desc(tasks.createdAt));
 
     return NextResponse.json({ data: result });
   } catch (error) {
-    console.error("Failed to fetch todos:", error);
+    console.error("Failed to fetch tasks:", error);
     return NextResponse.json({ error: { code: "SERVER_ERROR", message: "Internal server error" } }, { status: 500 });
   }
 }
@@ -33,20 +33,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: { code: "UNAUTHORIZED", message: "Not authenticated" } }, { status: 401 });
     }
 
-    const { title, date } = await request.json();
+    const body = await request.json();
+    const { title, description, date, priority } = body;
 
     if (!title || !title.trim()) {
       return NextResponse.json({ error: { code: "VALIDATION_ERROR", message: "Title is required" } }, { status: 400 });
     }
 
-    const [todo] = await db
-      .insert(todos)
-      .values({ userId: user.id, title: title.trim(), date: date || null })
+    const [task] = await db
+      .insert(tasks)
+      .values({
+        userId: user.id,
+        title: title.trim(),
+        description: description || null,
+        dueDate: date || null,
+        priority: priority || "medium",
+        status: "pending",
+      })
       .returning();
 
-    return NextResponse.json({ data: todo }, { status: 201 });
+    return NextResponse.json({ data: task }, { status: 201 });
   } catch (error) {
-    console.error("Failed to create todo:", error);
+    console.error("Failed to create task:", error);
     return NextResponse.json({ error: { code: "SERVER_ERROR", message: "Internal server error" } }, { status: 500 });
   }
 }

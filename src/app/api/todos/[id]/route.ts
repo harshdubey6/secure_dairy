@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
-import { todos } from "@/lib/db/schema";
+import { tasks } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 
 export async function PATCH(
@@ -19,13 +19,13 @@ export async function PATCH(
     const body = await request.json();
 
     const [updated] = await db
-      .update(todos)
+      .update(tasks)
       .set({ ...body, updatedAt: new Date() })
-      .where(and(eq(todos.id, id), eq(todos.userId, user.id)))
+      .where(and(eq(tasks.id, id), eq(tasks.userId, user.id)))
       .returning();
 
     if (!updated) {
-      return NextResponse.json({ error: { code: "NOT_FOUND", message: "Todo not found" } }, { status: 404 });
+      return NextResponse.json({ error: { code: "NOT_FOUND", message: "Task not found" } }, { status: 404 });
     }
 
     return NextResponse.json({ data: updated });
@@ -49,12 +49,12 @@ export async function DELETE(
     const { id } = await params;
 
     const [deleted] = await db
-      .delete(todos)
-      .where(and(eq(todos.id, id), eq(todos.userId, user.id)))
+      .delete(tasks)
+      .where(and(eq(tasks.id, id), eq(tasks.userId, user.id)))
       .returning();
 
     if (!deleted) {
-      return NextResponse.json({ error: { code: "NOT_FOUND", message: "Todo not found" } }, { status: 404 });
+      return NextResponse.json({ error: { code: "NOT_FOUND", message: "Task not found" } }, { status: 404 });
     }
 
     return NextResponse.json({ data: deleted });

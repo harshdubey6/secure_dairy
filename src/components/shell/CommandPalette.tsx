@@ -21,10 +21,12 @@ import {
   Tags,
   BarChart3,
   Settings,
+  Clock,
 } from "lucide-react";
 
 const commands = [
   { href: "/journal", label: "Today's Journal", icon: Book },
+  { href: "/journal/history", label: "Journal History", icon: Clock },
   { href: "/calendar", label: "Calendar", icon: Calendar },
   { href: "/search", label: "Search", icon: Search },
   { href: "/favorites", label: "Favorites", icon: Star },

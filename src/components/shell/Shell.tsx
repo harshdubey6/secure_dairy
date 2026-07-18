@@ -12,8 +12,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const { sidebarOpen } = useUIStore();
 
   return (
-    <div className="min-h-screen bg-bg-page">
-      <div className="hidden lg:block">
+    <div className="min-h-dvh bg-bg-page">
+      <div className="hidden md:block">
         <Sidebar />
       </div>
       <MobileNav />
@@ -22,11 +22,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <div
         className={cn(
           "transition-all duration-300",
-          sidebarOpen ? "lg:ml-64" : "lg:ml-16"
+          sidebarOpen ? "md:ml-64" : "md:ml-16"
         )}
       >
         <TopBar />
-        <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+        <main className="min-h-[calc(100dvh-4rem)]">{children}</main>
       </div>
 
       <OfflineIndicator />

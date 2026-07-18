@@ -111,7 +111,7 @@ export default function TagsPage() {
             </Link>
             <button
               onClick={() => deleteMutation.mutate(tag.id)}
-              className="text-text-muted hover:text-red transition-colors opacity-0 group-hover:opacity-100"
+              className="text-text-muted hover:text-red transition-colors opacity-0 group-hover:opacity-100 max-sm:opacity-100"
             >
               <X className="w-3 h-3" />
             </button>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -26,6 +27,7 @@ export function Editor({
   className,
 }: EditorProps) {
   const { fontSize, writingWidth } = useSettingsStore();
+  const hasSynced = useRef(false);
 
   const editor = useEditor({
     extensions: [
@@ -58,6 +60,20 @@ export function Editor({
       onChange?.(json, text);
     },
   });
+
+  useEffect(() => {
+    if (!editor || !content) return;
+    if (Object.keys(content).length === 0) return;
+    if (hasSynced.current) return;
+
+    const currentJson = JSON.stringify(editor.getJSON());
+    const targetJson = JSON.stringify(content);
+
+    if (currentJson !== targetJson) {
+      hasSynced.current = true;
+      editor.commands.setContent(content);
+    }
+  }, [editor, content]);
 
   const writingWidthClass = `writing-${writingWidth}`;
 

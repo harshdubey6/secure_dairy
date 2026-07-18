@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@/lib/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 
@@ -22,12 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        attribute="data-theme"
-        defaultTheme="paper"
-        enableSystem={false}
-        themes={["paper", "light", "dark", "sepia"]}
-      >
+      <ThemeProvider defaultTheme="paper">
         <TooltipProvider>
           {children}
           <Toaster

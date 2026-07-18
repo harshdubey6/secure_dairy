@@ -42,7 +42,7 @@ export default function EntryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-page">
+    <div className="min-h-dvh bg-bg-page">
       <EntryHeader
         date={entry.date}
         mood={entry.mood}

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { entries } from "@/lib/db/schema";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, gte, lte, sql } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
   try {
@@ -30,11 +30,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (dateFrom) {
-      conditions.push(sql`${entries.date} >= ${dateFrom}`);
+      conditions.push(gte(entries.date, dateFrom));
     }
 
     if (dateTo) {
-      conditions.push(sql`${entries.date} <= ${dateTo}`);
+      conditions.push(lte(entries.date, dateTo));
     }
 
     if (mood) {

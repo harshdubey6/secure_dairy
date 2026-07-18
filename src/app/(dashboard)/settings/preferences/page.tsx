@@ -1,17 +1,22 @@
 "use client";
 
-import { useTheme } from "next-themes";
+import { useTheme } from "@/lib/theme-provider";
 import { useSettingsStore } from "@/stores/settings-store";
 import { FONT_SIZES } from "@/lib/constants";
 import { cn } from "@/lib/utils/cn";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Sparkles, Droplets, Flower2, MoonStar, Mountain } from "lucide-react";
 
 const themeOptions = [
   { value: "paper", label: "Paper", icon: "📖" },
   { value: "light", label: "Light", icon: <Sun className="w-4 h-4" /> },
   { value: "dark", label: "Dark", icon: <Moon className="w-4 h-4" /> },
   { value: "sepia", label: "Sepia", icon: "📜" },
-];
+  { value: "mellow", label: "Mellow", icon: <Sparkles className="w-4 h-4" /> },
+  { value: "ocean", label: "Ocean", icon: <Droplets className="w-4 h-4" /> },
+  { value: "rose", label: "Rose", icon: <Flower2 className="w-4 h-4" /> },
+  { value: "midnight", label: "Midnight", icon: <MoonStar className="w-4 h-4" /> },
+  { value: "charcoal", label: "Charcoal", icon: <Mountain className="w-4 h-4" /> },
+] as const;
 
 const widthOptions = [
   { value: "narrow", label: "Narrow" },

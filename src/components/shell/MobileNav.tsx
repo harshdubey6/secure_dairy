@@ -4,16 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { useUIStore } from "@/stores/ui-store";
-import { Book, Calendar, Search, Star, Archive, Tags, BarChart3, Settings, X } from "lucide-react";
+import { Book, Calendar, Star, Archive, Tags, BarChart3, Settings, X, Clock, LayoutDashboard, CheckSquare, Shield, Trash2 } from "lucide-react";
 
 const mobileNavItems = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/journal", label: "Journal", icon: Book },
+  { href: "/journal/history", label: "History", icon: Clock },
   { href: "/calendar", label: "Calendar", icon: Calendar },
-  { href: "/search", label: "Search", icon: Search },
+
+  { href: "/todos", label: "Tasks", icon: CheckSquare },
+  { href: "/vault", label: "Vault", icon: Shield },
   { href: "/favorites", label: "Favorites", icon: Star },
   { href: "/archive", label: "Archive", icon: Archive },
   { href: "/tags", label: "Tags", icon: Tags },
-  { href: "/stats", label: "Stats", icon: BarChart3 },
+  { href: "/trash", label: "Trash", icon: Trash2 },
+  { href: "/stats", label: "Statistics", icon: BarChart3 },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -24,7 +29,7 @@ export function MobileNav() {
   if (!mobileNavOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 lg:hidden">
+      <div className="fixed inset-0 z-50 md:hidden">
       <div
         className="fixed inset-0 bg-black/20 backdrop-blur-sm"
         onClick={() => setMobileNavOpen(false)}

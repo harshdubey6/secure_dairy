@@ -38,7 +38,8 @@ export const EXPORT_FORMATS = ["markdown", "pdf", "html", "json"] as const;
 export const API_ROUTES = {
   entries: "/api/entries",
   todayEntry: "/api/entries/today",
-  search: "/api/entries/search",
+  search: "/api/search",
+  globalSearch: "/api/search",
   tags: "/api/tags",
   favorites: "/api/favorites",
   attachments: "/api/attachments",
@@ -46,4 +47,10 @@ export const API_ROUTES = {
   calendar: "/api/calendar",
   preferences: "/api/preferences",
   export: "/api/export",
+  vault: "/api/vault",
+  vaultSetup: "/api/vault/setup",
+  vaultVerify: "/api/vault/verify",
+  vaultCategories: "/api/vault/categories",
+  tasks: "/api/todos",
+  reminders: "/api/reminders",
 } as const;
